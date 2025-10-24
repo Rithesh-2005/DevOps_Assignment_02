@@ -3,8 +3,7 @@ kind: Deployment
 metadata:
   name: ticket-app-deployment
 spec:
-  [cite_start] 
-  replicas : 2 # Start with 2 replicas 
+  replicas: 2 # This is probably your 'line 6'. Note the indentation.
   selector:
     matchLabels:
       app: ticket-app
@@ -14,8 +13,8 @@ spec:
         app: ticket-app
     spec:
       containers:
-      - name: ticket-app
-        # IMPORTANT: Replace this with your image from Docker Hub
-        image: YOUR_DOCKERHUB_USERNAME/ticket-app:latest 
-        ports:
-        - containerPort: 5000
+        - name: ticket-app
+          # This line will be replaced by your pipeline
+          image: YOUR_DOCKERHUB_USERNAME/ticket-app:latest
+          ports:
+            - containerPort: 5000
