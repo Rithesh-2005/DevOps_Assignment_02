@@ -47,6 +47,7 @@ This project demonstrates a complete, automated DevOps workflow. The process is 
 * **Orchestration:** Kubernetes (via Docker Desktop)
 
 ---
+![UI of Web Application](./screenshots/WebApplication.png)
 
 ## 4. Version Control and Branching (Git)
 
@@ -122,6 +123,7 @@ The `Dockerfile` performs the following steps:
     # Build the image and tag it
     docker build -t ticket-app .
     ```
+![Docker Build Output](./screenshots/DockerBuild.png)
 
 2.  **Test the Docker image locally:** 
     ```bash
@@ -129,6 +131,8 @@ The `Dockerfile` performs the following steps:
     docker run -d -p 5000:5000 --name test-app ticket-app
     ```
     You can now access the application at `http://localhost:5000`.
+![Docker Run Output](./screenshots/DockeContainerRunDockerDesktop.png)
+
 
 3.  **Stop and remove the test container:**
     ```bash
@@ -176,6 +180,7 @@ Jenkins automates the entire CI/CD pipeline, defined in the `Jenkinsfile`.
     * Runs `kubectl rollout status` to wait for the deployment to complete successfully.
 
 ---
+![Jenkins Pipeline Overview](./screenshots/JenkinsPipeline.png)
 
 ## 7. Deployment and Orchestration (Kubernetes)
 
@@ -197,6 +202,8 @@ Kubernetes is used to deploy and manage our containerized application. We use tw
     ```bash
     kubectl get pods
     ```
+
+![Kubernetes output](./screenshots/Kubernetes.png)
 
 4.  **Check service status to find the NodePort:**
     ```bash
