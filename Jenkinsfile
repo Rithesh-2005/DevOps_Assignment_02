@@ -38,12 +38,13 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
+                // This 'withKubeConfig' step is correct
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     
-                    // The fix is here: $_ has been changed to \$_
+                    // THE FIX IS ON THIS LINE: Change $_ to \$_
                     powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
                     
-                    // These commands are correct
+                    // These lines are correct
                     bat "kubectl apply -f k8s/deployment.yaml"
                     bat "kubectl apply -f k8s/service.yaml"
                     bat "kubectl rollout status deployment/ticket-app-deployment"
