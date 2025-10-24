@@ -12,19 +12,15 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout code from Git
-                git scm
-            }
+    
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
                     // Build the Docker image 
-                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ."
-                    sh "docker tag ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${DOCKER_IMAGE_NAME}:latest"
+                    bat "docker build -t ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                    bat "docker tag ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER} ${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
@@ -33,9 +29,9 @@ pipeline {
             steps {
                 // Log in to Docker Hub and push the image [cite: 20]
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDS_ID, passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                    sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
-                    sh "docker push ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                    sh "docker push ${DOCKER_IMAGE_NAME}:latest"
+                    bat "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                    bat "docker push ${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    bat "docker push ${DOCKER_IMAGE_NAME}:latest"
                 }
             }
         }
@@ -46,12 +42,12 @@ pipeline {
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     // We must update the image in the deployment file first
                     // This uses 'sed' to find the 'image:' line and replace it with the new build
-                    sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE_NAME}:latest|g' deployment.yaml"
+                    bat "sed -i 's|image: .*|image: ${DOCKER_IMAGE_NAME}:latest|g' deployment.yaml"
                     
                     // Apply the updated deployment and service manifests 
-                    sh "kubectl apply -f kubernetes/deployment.yaml"
-                    sh "kubectl apply -f kubernetes/service.yaml"
-                    sh "kubectl rollout status deployment/ticket-app-deployment"
+                    bat "kubectl apply -f kubernetes/deployment.yaml"
+                    bat "kubectl apply -f kubernetes/service.yaml"
+                    bat "kubectl rollout status deployment/ticket-app-deployment"
                 }
             }
         }
@@ -62,7 +58,6 @@ pipeline {
             // Clean up workspace
             cleanWs()
             // Log out from Docker Hub
-            sh "docker logout"
+            bat "docker logout"
         }
     }
-}   
