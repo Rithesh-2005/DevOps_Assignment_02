@@ -15,7 +15,7 @@ COPY . .
 
 # Ensure the templates directory is copied
 COPY templates /app/templates
-COPY kubernetes /app/kubernetes
+COPY k8s /app/k8s
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
 
