@@ -2,7 +2,7 @@
 
 ## 1. Problem Statement
 
-[cite_start]To design and implement a complete, automated CI/CD workflow for a web-based ticket booking application using Git, Docker, Jenkins, and Kubernetes[cite: 3, 5].
+To design and implement a complete, automated CI/CD workflow for a web-based ticket booking application using Git, Docker, Jenkins, and Kubernetes.
 
 ---
 
@@ -33,10 +33,10 @@ DevOps_Assignment_02/
 This project demonstrates a complete, automated DevOps workflow. The process is as follows:
 
 1.  A developer pushes new code (e.g., a new feature) to the `develop` branch on GitHub.
-2.  [cite_start]A GitHub webhook notifies the Jenkins server of the change[cite: 18].
+2.  A GitHub webhook notifies the Jenkins server of the change.
 3.  Jenkins automatically triggers a new pipeline build.
 4.  The pipeline builds a new Docker image of the application.
-5.  [cite_start]This new image is tagged and pushed to Docker Hub[cite: 20].
+5.  This new image is tagged and pushed to Docker Hub.
 6.  The pipeline then securely connects to a Kubernetes cluster and deploys the new image by updating the deployment.
 7.  Kubernetes handles the rolling update, ensuring zero downtime.
 
@@ -48,9 +48,9 @@ This project demonstrates a complete, automated DevOps workflow. The process is 
 
 ---
 
-## [cite_start]4. Version Control and Branching (Git) [cite: 6]
+## 4. Version Control and Branching (Git)
 
-[cite_start]This project uses the **GitFlow** branching strategy to manage development[cite: 8].
+This project uses the **GitFlow** branching strategy to manage developmen.
 
 * `main`: This branch holds production-ready code. No direct commits are allowed.
 * `develop`: This is the primary integration branch. All features are merged here before being released. Our Jenkins pipeline is triggered by pushes to this branch.
@@ -103,7 +103,7 @@ This project demonstrates a complete, automated DevOps workflow. The process is 
 
 ---
 
-## [cite_start]5. Containerization (Docker) [cite: 10]
+## 5. Containerization (Docker) 
 
 The application is containerized using a `Dockerfile`.
 
@@ -117,13 +117,13 @@ The `Dockerfile` performs the following steps:
 
 ### Steps and Commands:
 
-1.  [cite_start]**Build the Docker image locally:** [cite: 13]
+1.  **Build the Docker image locally:**
     ```bash
     # Build the image and tag it
     docker build -t ticket-app .
     ```
 
-2.  [cite_start]**Test the Docker image locally:** [cite: 13]
+2.  **Test the Docker image locally:** 
     ```bash
     # Run the container in detached mode, mapping port 5000
     docker run -d -p 5000:5000 --name test-app ticket-app
@@ -138,9 +138,9 @@ The `Dockerfile` performs the following steps:
 
 ---
 
-## [cite_start]6. Continuous Integration (Jenkins) [cite: 15]
+## 6. Continuous Integration (Jenkins) 
 
-[cite_start]Jenkins automates the entire CI/CD pipeline, defined in the `Jenkinsfile`[cite: 16].
+Jenkins automates the entire CI/CD pipeline, defined in the `Jenkinsfile`.
 
 ### Jenkins Setup Steps:
 
@@ -177,12 +177,12 @@ The `Dockerfile` performs the following steps:
 
 ---
 
-## [cite_start]7. Deployment and Orchestration (Kubernetes) [cite: 21]
+## 7. Deployment and Orchestration (Kubernetes)
 
-[cite_start]Kubernetes is used to deploy and manage our containerized application[cite: 24]. We use two manifest files:
+Kubernetes is used to deploy and manage our containerized application. We use two manifest files:
 
-* [cite_start]**`k8s/deployment.yaml`:** [cite: 25] Defines the desired state for our application. It tells Kubernetes to run 2 replicas of our `ticket-app` image from Docker Hub.
-* [cite_start]**`k8s/service.yaml`:** [cite: 25] Exposes our application to the network. It creates a `NodePort` service, which maps a port on the host machine to the application's port 5000 inside the cluster.
+* **`k8s/deployment.yaml`:**  Defines the desired state for our application. It tells Kubernetes to run 2 replicas of our `ticket-app` image from Docker Hub.
+* **`k8s/service.yaml`:**  Exposes our application to the network. It creates a `NodePort` service, which maps a port on the host machine to the application's port 5000 inside the cluster.
 
 ### Steps and Commands (Manual Verification):
 
@@ -209,7 +209,7 @@ The `Dockerfile` performs the following steps:
 5.  **Access the Application:**
     Open your browser and go to `http://localhost:<NODE_PORT>`. In the example above, this would be `http://localhost:31234`.
 
-6.  [cite_start]**Scale the Application:** [cite: 26]
+6.  **Scale the Application:** 
     You can manually scale the number of pods:
     ```bash
     kubectl scale deployment ticket-app-deployment --replicas=3
@@ -235,7 +235,7 @@ To automate the entire process, we connect GitHub to Jenkins.
     * **Script Path:** Type `Jenkinsfile`.
     * Click **Save**.
 
-2.  [cite_start]**Set up the GitHub Webhook:** [cite: 18]
+2.  **Set up the GitHub Webhook:**
     * In your GitHub repository, go to **Settings** > **Webhooks** > **Add webhook**.
     * **Payload URL:** This must be a public URL to your Jenkins server.
         * **Note:** If your Jenkins is on `localhost`, you must use a tunneling service like **ngrok** to get a public URL.
