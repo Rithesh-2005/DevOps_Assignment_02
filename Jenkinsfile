@@ -38,17 +38,18 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // This 'withKubeConfig' step is correct
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     
-                    retry(2){
-                        // THE FIX IS ON THIS LINE: Change $_ to \$_
-                    sleep 2
-                    powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
-                    }
-                    // These lines are correct
-                    bat "kubectl apply -f k8s/deployment.yaml"
+                    // 1. Read from the original, write to a NEW .tmp file
+                    powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.tmp.yaml"
+                    
+                    // 2. Apply the NEW .tmp file
+                    bat "kubectl apply -f k8s/deployment.tmp.yaml"
+                    
+                    // 3. Apply the service file (no changes needed)
                     bat "kubectl apply -f k8s/service.yaml"
+
+                    // 4. Check the rollout status
                     bat "kubectl rollout status deployment/ticket-app-deployment"
                 }
             }
