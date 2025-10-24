@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-app-deployment
+spec:
+  [cite_start] 
+  replicas : 2 # Start with 2 replicas 
+  selector:
+    matchLabels:
+      app: ticket-app
+  template:
+    metadata:
+      labels:
+        app: ticket-app
+    spec:
+      containers:
+      - name: ticket-app
+        # IMPORTANT: Replace this with your image from Docker Hub
+        image: YOUR_DOCKERHUB_USERNAME/ticket-app:latest 
+        ports:
+        - containerPort: 5000

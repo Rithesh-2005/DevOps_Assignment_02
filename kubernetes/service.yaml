@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticket-app-service
+spec:
+  type: NodePort # Use NodePort for testing. Use LoadBalancer for cloud.
+  selector:
+    app: ticket-app
+  ports:
+    - protocol: TCP
+      port: 80 # Port the service will be available on
+      targetPort: 5000 # Port the container is running on
