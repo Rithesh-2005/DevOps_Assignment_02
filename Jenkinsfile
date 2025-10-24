@@ -42,7 +42,7 @@ pipeline {
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     // We must update the image in the deployment file first
                     // This uses 'sed' to find the 'image:' line and replace it with the new build
-                    bat "sed -i 's|image: .*|image: ${DOCKER_IMAGE_NAME}:latest|g' deployment.yaml"
+                    powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { $_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
                     
                     // Apply the updated deployment and service manifests 
                     bat "kubectl apply -f kubernetes/deployment.yaml"
