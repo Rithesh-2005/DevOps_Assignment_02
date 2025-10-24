@@ -49,8 +49,8 @@ pipeline {
                     sh "sed -i 's|image: .*|image: ${DOCKER_IMAGE_NAME}:latest|g' deployment.yaml"
                     
                     // Apply the updated deployment and service manifests 
-                    sh "kubectl apply -f deployment.yaml"
-                    sh "kubectl apply -f service.yaml"
+                    sh "kubectl apply -f kubernetes/deployment.yaml"
+                    sh "kubectl apply -f kubernetes/service.yaml"
                     sh "kubectl rollout status deployment/ticket-app-deployment"
                 }
             }

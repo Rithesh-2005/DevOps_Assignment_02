@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket Booking Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+      }
+      input[type="text"] {
+        width: calc(50% - 10px);
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box; /* Include padding in width */
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #response {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e9e9e9;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ticket Booking Demo</h1>
+      <form id="bookingForm">
+        <input type="text" name="your_name" placeholder="Your name" required />
+        <input
+          type="text"
+          name="event_name"
+          placeholder="Event name"
+          required
+        />
+        <button type="submit">Book</button>
+      </form>
+      <div id="response"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("bookingForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          const formData = new FormData(this);
+          const responseDiv = document.getElementById("response");
+          responseDiv.textContent = "Booking...";
+
+          try {
+            const response = await fetch("/book", {
+              method: "POST",
+              body: formData, // FormData automatically sets content-type
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Prettify JSON output
+              responseDiv.textContent = JSON.stringify(data, null, 2);
+            } else {
+              responseDiv.textContent = `Error: ${
+                data.error || "Something went wrong"
+              }`;
+            }
+          } catch (error) {
+            responseDiv.textContent = `Network error: ${error.message}`;
+          }
+        });
+    </script>
+  </body>
+</html>
