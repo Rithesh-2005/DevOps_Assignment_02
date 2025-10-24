@@ -40,15 +40,13 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     
-                    // This command is correct
+                    // This powershell command is correct
                     powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.tmp.yaml"
                     
-                    // Add --validate=false to both apply commands
-                    bat "kubectl apply -f k8s/deployment.tmp.yaml --validate=false"
-                    bat "kubectl apply -f k8s/service.yaml --validate=false"
-
-                    // This command is correct
-                    bat "kubectl rollout status deployment/ticket-app-deployment"
+                    // Add the --insecure-skip-tls-verify=true flag to all kubectl commands
+                    bat "kubectl --insecure-skip-tls-verify=true apply -f k8s/deployment.tmp.yaml --validate=false"
+                    bat "kubectl --insecure-skip-tls-verify=true apply -f k8s/service.yaml --validate=false"
+                    bat "kubectl --insecure-skip-tls-verify=true rollout status deployment/ticket-app-deployment"
                 }
             }
         }
