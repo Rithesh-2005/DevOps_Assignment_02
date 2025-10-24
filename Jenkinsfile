@@ -41,9 +41,11 @@ pipeline {
                 // This 'withKubeConfig' step is correct
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     
-                    // THE FIX IS ON THIS LINE: Change $_ to \$_
+                    retry(2){
+                        // THE FIX IS ON THIS LINE: Change $_ to \$_
+                    sleep 2
                     powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
-                    
+                    }
                     // These lines are correct
                     bat "kubectl apply -f k8s/deployment.yaml"
                     bat "kubectl apply -f k8s/service.yaml"
