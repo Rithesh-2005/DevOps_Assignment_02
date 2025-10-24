@@ -131,7 +131,7 @@ The `Dockerfile` performs the following steps:
     docker run -d -p 5000:5000 --name test-app ticket-app
     ```
     You can now access the application at `http://localhost:5000`.
-![Docker Run Output](./screenshots/DockeContainerRunDockerDesktop.png)
+![Docker Run Output](./screenshots/DockerContainerRunDockerDesktop.png)
 
 
 3.  **Stop and remove the test container:**
