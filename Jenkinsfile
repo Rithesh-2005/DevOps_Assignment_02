@@ -38,15 +38,14 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                // Use the kubeconfig credential to deploy 
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
-                    // We must update the image in the deployment file first
-                    // This uses 'sed' to find the 'image:' line and replace it with the new build
-                    powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { $_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
                     
-                    // Apply the updated deployment and service manifests 
-                    bat "kubectl apply -f kubernetes/deployment.yaml"
-                    bat "kubectl apply -f kubernetes/service.yaml"
+                    // The fix is here: $_ has been changed to \$_
+                    powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.yaml"
+                    
+                    // These commands are correct
+                    bat "kubectl apply -f k8s/deployment.yaml"
+                    bat "kubectl apply -f k8s/service.yaml"
                     bat "kubectl rollout status deployment/ticket-app-deployment"
                 }
             }
