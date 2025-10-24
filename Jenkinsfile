@@ -5,7 +5,7 @@ pipeline {
         // Replace with your Docker Hub username
         DOCKERHUB_USERNAME = 'rithesh2005'
         // This is the ID of the 'Username and Password' credential you set up in Jenkins
-        DOCKERHUB_CREDS_ID = 'docker-hub-cred-id' 
+        DOCKERHUB_CREDS_ID = 'docker-hub-cerd-id' 
         // This is the ID of the 'kubeconfig' credential you set up in Jenkins
         KUBE_CONFIG_ID = 'kubeconfig' 
         DOCKER_IMAGE_NAME = "${DOCKERHUB_USERNAME}/ticket-app"
