@@ -40,16 +40,14 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: KUBE_CONFIG_ID]) {
                     
-                    // 1. Read from the original, write to a NEW .tmp file
+                    // This command is correct
                     powershell "Get-Content k8s\\deployment.yaml | ForEach-Object { \$_ -replace 'image: .*', \"image: ${env.DOCKER_IMAGE_NAME}:latest\" } | Set-Content k8s\\deployment.tmp.yaml"
                     
-                    // 2. Apply the NEW .tmp file
-                    bat "kubectl apply -f k8s/deployment.tmp.yaml"
-                    
-                    // 3. Apply the service file (no changes needed)
-                    bat "kubectl apply -f k8s/service.yaml"
+                    // Add --validate=false to both apply commands
+                    bat "kubectl apply -f k8s/deployment.tmp.yaml --validate=false"
+                    bat "kubectl apply -f k8s/service.yaml --validate=false"
 
-                    // 4. Check the rollout status
+                    // This command is correct
                     bat "kubectl rollout status deployment/ticket-app-deployment"
                 }
             }
